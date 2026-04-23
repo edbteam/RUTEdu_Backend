@@ -1,5 +1,5 @@
 import Fastify from 'fastify';
-import config from '../config';
+import config from '../config.ts';
 import { handler } from './handler.ts';
 
 const fastify = Fastify(
