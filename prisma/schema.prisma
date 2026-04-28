@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated"
+  engineType = "library"
+  runtime = "bun"
+  moduleFormat           = "esm"
+  generatedFileExtension = "ts"
+  importFileExtension    = "ts"
+}
+
+datasource db {
+  provider = "mongodb"
+  url = env("DATABASE_URL")
+}
+
+enum QuestionType {
+  SINGLE_CHOICE // ABCD choose one
+  MULTIPLE_CHOICE // ABCD choose many
+  BOOLEAN // True and false
+  ORDER // Order from 1 do X
+  TEXT // Type in
+}
+
+model Course {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  name  String @unique
+
+  subjectIds String[]  @db.ObjectId
+  subjects   Subject[] @relation(fields: [subjectIds], references: [id])
+}
+
+model Subject {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  name  String @unique
+
+  courseIds String[] @db.ObjectId
+  courses   Course[] @relation(fields: [courseIds], references: [id])
+
+  questionIds String[]   @db.ObjectId
+  questions   Question[] @relation(fields: [questionIds], references: [id])
+}
+
+model Question {
+  id   String       @id @default(auto()) @map("_id") @db.ObjectId
+  type QuestionType
+  prompt String
+  promptPhotoURL String
+
+  //? for BOOLEAN:
+  correctBool Boolean?
+
+  //? for SINGLE_CHOICE
+  correctAnswer Int?
+  answers String[]
+  answersPhotosURLs String[]
+
+  //? for MULTIPLE_CHOICE
+  correctAnswers Int[] // Starting from 0 in array
+
+  //? for ORDER
+  correctOrder Int[] // Starting from 0 in array
+
+  //? for TEXT
+  acceptedTextAnswers String[]
+
+  subjectIds String[]  @db.ObjectId
+  subjects   Subject[] @relation(fields: [subjectIds], references: [id])
+}
