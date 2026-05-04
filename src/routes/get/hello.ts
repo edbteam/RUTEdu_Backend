@@ -1,5 +1,8 @@
 import type { FastifyRequest, FastifyReply } from "fastify";
 
-export default async function hello(request: FastifyRequest, reply: FastifyReply) {
-    return "Hello World!";
+export default {
+	paths: ["/hello", "/world", "/test*"],
+	handler: async (request: FastifyRequest, reply: FastifyReply) => {
+		return "Hello World";
+	}
 }
