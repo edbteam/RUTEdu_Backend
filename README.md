@@ -8,7 +8,7 @@ A backend service for an educational platform, built as an academic project.
 - **Web Framework:** Fastify
 - **Database:** MongoDB
 - **ORM:** Prisma
-- **Validation:** Zod
+- **Validation:** Zod (with `fastify-type-provider-zod` for Fastify route integration)
 - **API Documentation:** Swagger
 
 ## Project Structure
@@ -29,6 +29,11 @@ The application uses a MongoDB database to store educational content, structured
    - **BOOLEAN:** Simple True or False questions.
    - **ORDER:** Questions where items need to be arranged in a specific sequence.
    - **TEXT:** Questions requiring typed text input.
+
+## API Documentation & Routing
+The application automatically generates OpenAPI (Swagger) documentation based on Zod validation schemas defined in the route files. 
+- **Swagger UI:** You can access the interactive API documentation at `/docs` when the server is running.
+- **Routes:** Each route exports `paths`, a `schema` (using Zod for validation and OpenAPI generation), and a `handler` function.
 
 ## How to Run
 
