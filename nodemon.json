@@ -1,0 +1,6 @@
+{
+  	"watch": ["src", "config.ts", "prisma"],
+  	"ext": "ts,js,html,css,json,prisma",
+  	"ignore": ["node_modules", "bun.lock"],
+  	"exec": "bun run ./src/app.ts"
+}
