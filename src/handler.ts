@@ -1,7 +1,3 @@
-//! ↓ Application AntiCrash ↓
-process.on('unhandledRejection', (error)=>{console.log(error)});
-process.on('uncaughtException', (error)=>{console.log(error)});
-
 import fs from 'node:fs/promises';
 import path from 'path';
 import { type FastifyInstance } from "fastify";
@@ -37,13 +33,15 @@ async function handler(fastify: FastifyInstance) {
 
 			try {
 				const route = await import(filePath);
+				const schema = route.default.schema || route.schema;
+				const config = route.default.config || route.config;
 				const handlerFn = route.default.handler || route.handler;
 				const routePaths = route.default.paths || route.paths;
 
 				if (typeof handlerFn === 'function') {
 					const method = methodMap[rq_type];
 					for (const route of routePaths) {
-						fastify[method](route, handlerFn);
+						fastify[method](route, { schema, config }, handlerFn);
 						console.log(`[Route Loader] Registered ${rq_type.toUpperCase()} ${route} (via ${method.toUpperCase()})`);
 					}
 				} else {
